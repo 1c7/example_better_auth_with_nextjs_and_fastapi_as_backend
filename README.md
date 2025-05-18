@@ -111,10 +111,12 @@ uv run uvicorn main:app --reload
 ```
 
 ## 注册账号，访问 http://localhost:8080/sign-up
+注册后会自动跳转首页 `/`
 
 ## 登录账号，访问 http://localhost:8080/sign-in
+登录后会自动跳转首页 `/`
 
-## 访问首页
+## 访问首页： http://localhost:8080/
 首页会发请求给 http://localhost:8080/backend     
 
 请阅读以下 2 个文件：  
@@ -126,11 +128,11 @@ uv run uvicorn main:app --reload
 如果是 Next.js Client Component 就会默认携带 Cookie。  
 
 ## 概述 `backend/main.py`
-从 Cookie 中获取 `better-auth.session_token`，   
+代码逻辑：从 Cookie 中获取 `better-auth.session_token`，或者从 HTTP Header `Authorization` 里获取 token。    
 
-然后有两种选择：
-1. 直接使用 `split(".")[0]` 查询数据库表 `session` 的 `token` 字段
-2. 验证签名，用 `backend/verify_session_token.py` 验证后，如果 valid（有效） 再去查数据库表 `session` 的 `token` 字段
+如果是从 Cookie 里用 `better-auth.session_token`，你有两种选择：
+1. 直接使用，不验证签名，用 `split(".")[0]` 拿到 token, 去查询数据库表 `session` 的 `token` 字段
+2. 先验证签名，用 `backend/verify_session_token.py` 如果 valid（有效）再去查数据库表 `session` 的 `token` 字段
 
 ## 备注：Python 生态做 Authentication 没有好的选择，   
 FastAPI 的生态里没有类似 Ruby on Rails 的 devise gem 那么好用。  
