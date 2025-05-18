@@ -130,11 +130,11 @@ Python 生态做 Authentication 没有好的选择，
 [Awesome Python 的 Authentication](https://github.com/vinta/awesome-python?tab=readme-ov-file#authentication) 都是一些简单的代码库，还是需要自己大量写代码。  
 
 ## 结论：我希望用 better auth 作为 Authentication 方案
-1. Github Star 有 13.5k
-2. 网上对于 better auth 的夸赞有很多
-3. better auth 是 YC 2025 春季被投企业（算是一种认可和背书）
-4. better auth 的文档清晰直接
-5. 我实际试用 better auth 之后觉得体验不错。   
+1. [`better-auth`](https://github.com/better-auth/better-auth) 的 Github Star 有 13.5k
+2. 网上很多夸赞 better auth
+3. better auth 是 YC 2025 春季被投企业（算是认可和背书）
+4. better auth 的文档清晰
+5. 我实际试用 better auth 觉得体验不错。   
 
 ## 参考资料
 1. [YC > Companies ›Better Auth](https://www.ycombinator.com/companies/better-auth)
