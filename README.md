@@ -1,5 +1,5 @@
 ## 演示：使用 `Better Auth`（Next.js） + FastAPI
-关键点：演示如何在 FastAPI 中获得当前用户身份。  
+关键点：演示在 FastAPI 中获得 better auth 用户身份。  
 
 ## 为什么要用 FastAPI？明明 Next.js 可以做全栈（用 ORM 操作数据库）
 因为需要 AI 功能，AI 大多基于 Python 生态圈，很多库是 Python 库。   
@@ -13,8 +13,75 @@ better-auth 没有提供对接其他语言的官方文档，这个方案是我�
 
 [参考](https://github.com/better-auth/better-auth/issues/2685)
 
+## 如何运行
+整体结构：本地用 nginx 做转发。  
+
+查看 nginx 配置文件路径：
+```
+nginx -t
+```
+
+输出:
+```
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
+```
+
+编辑此文件
+```
+code /opt/homebrew/etc/nginx/nginx.conf
+```
+
+关键点
+```json
+server {
+    listen       8080;
+    server_name  localhost;
+
+    location / {
+        proxy_pass http://localhost:9000; # 前端 Next.js
+    }
+
+    location /backend {
+        proxy_pass http://localhost:8000; # 后端 FastAPI
+    }
+```
+
+让 nginx 启动或重启（使得配置生效）
+```
+- 启动：`brew services start nginx`
+- 停止：`brew services stop nginx`
+- 重启：`brew services restart nginx`
+- 重新加载配置：`nginx -s reload` （可能需要 `sudo`）
+```
+
+### 运行前端
+```bash
+cd frontend/
+
+# 安装依赖
+pnpm install 
+
+# 启动服务器
+pnpm run dev
+```
+
+### 运行后端
+```bash
+cd backend
+
+# 安装依赖
+uv sync
+
+# 运行
+uv run uvicorn main:app --reload
+```
+
+
+
 ## 备注
 Python 生态做 Authentication 没有好的选择，   
+没有 Ruby on Rails 的 devise gem 或者类似 gem 那么易用。  
 因为我们选了 FastAPI，最好的选项是 `FastAPI Users`，但是依然太难用了。
 
 [Awesome Python 的 Authentication](https://github.com/vinta/awesome-python?tab=readme-ov-file#authentication) 都是一些简单的代码库，还是需要自己大量写代码。  

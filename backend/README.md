@@ -1,8 +1,4 @@
-# FastAPI Hello World
-
-这是一个简单的 FastAPI Hello World 示例项目。
-
-## 环境管理
+# FastAPI 示例项目
 
 ### 安装 uv
 ```bash
