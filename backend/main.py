@@ -11,21 +11,20 @@ app = FastAPI(root_path='/backend')
 
 @app.get("/")
 async def root(request: Request, db: Session = Depends(get_session)):
-    # 获取请求的 cookies 和 headers
+    '''
+    整体思路：有 Cookie 就用 Cookie，没有就用 Authorization header，两个都没有就报错。
+    '''
     cookies = request.cookies
     auth_header = request.headers.get('Authorization')
-    token_to_query_db = None
+    token_to_query_db = None # 用于查询数据库的 token
     
     # 如果 Cookie 和 Authorization header 都不存在，返回错误
     if 'better-auth.session_token' not in cookies and not auth_header:
         print("No session token found in cookies or Authorization header.")
         return {"error": "未找到登录凭证，请先登录"}
     
-    if auth_header:
-        # 如果 Authorization header 存在，使用它
-        token_to_query_db = auth_header.split(" ")[1]
-    elif 'better-auth.session_token' in cookies:
-        # 否则使用 cookie 中的 session token
+    # 如果 Authorization header 存在，优先使用它
+    if 'better-auth.session_token' in cookies:
         session_token = cookies['better-auth.session_token']
         token = session_token.split('.')[0]
 
@@ -36,8 +35,10 @@ async def root(request: Request, db: Session = Depends(get_session)):
             print("Session token is invalid.")
             return {"error": "无效的登录凭证"}
         token_to_query_db = token
+    elif auth_header: # 如果 Authorization header 存在，使用它
+        token_to_query_db = auth_header.split(" ")[1]
 
-    # 查询session记录
+    # 查询数据库表 `session` 的 token 字段
     statement = select(UserSession).where(UserSession.token == token_to_query_db)
     user_session = db.exec(statement).first()
     
