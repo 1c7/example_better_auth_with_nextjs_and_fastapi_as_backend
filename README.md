@@ -95,7 +95,7 @@ CONNECTION_STRING="postgresql://postgres:password@localhost:5432/demo_better_aut
 ```
 npx @better-auth/cli migrate
 ```
-会创建 4 张表：user, account, session, verification
+会创建 4 张表：user, account, session, verification  
 参考 `frontend/better-auth_migrations/`   
 
 
@@ -140,6 +140,11 @@ Python 生态做 Authentication 没有好的选择，
 1. [YC > Companies ›Better Auth](https://www.ycombinator.com/companies/better-auth)
 1. [YC > Launches > Better Auth - The Authentication Framework for TypeScript](https://www.ycombinator.com/launches/NUm-better-auth-the-authentication-framework-for-typescript)
 1. [Youtube: Auth is HARD... this makes it EASY - Ras Mic](https://www.youtube.com/watch?v=QurjwJHCoHQ)
+
+## 注意
+1. `Next.js` 区分 Server Component 和 Client Component
+2. `Better-Auth` 也区分 server 和 client
+写代码时不要弄混了。     
 
 <!-- # Demo: use `better-auth`(Next.js) with FastAPI
 
