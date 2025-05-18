@@ -3,26 +3,20 @@
 import Image from "next/image";
 import { authClient, useSession } from "@/lib/auth-client"
 import { useEffect } from "react";
-// console.log("this is Home")
-// const { data: session } = await authClient.getSession()
-// console.log('sessionis', session)
-
 
 export default function Home() {
 
-      const { 
-      data: session, 
-      isPending, //loading state
-      error, //error object
-      refetch //refetch the session
-    } = authClient.useSession() 
-    console.log(session)
-    
+  const {
+    data: session,
+    isPending, //loading state
+    error, //error object
+    refetch //refetch the session
+  } = authClient.useSession()
+  console.log(session)
+
   useEffect(() => {
 
-
-
-
+    // 发请求给后端
     fetch('http://localhost:8080/backend')
       .then(response => {
         if (!response.ok) {
@@ -37,8 +31,6 @@ export default function Home() {
         console.error('Error:', error);
       });
   }, [])
-
-
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

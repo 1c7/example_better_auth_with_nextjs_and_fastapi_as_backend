@@ -66,6 +66,27 @@ pnpm install
 pnpm run dev
 ```
 
+### 配置 PostgreSQL 数据库
+```
+cp .env.example .env
+```
+
+.env 文件设置 `CONNECTION_STRING`
+```
+CONNECTION_STRING="postgresql://neondb_owner:npg_QnvkFf2iPeN0@ep-curly-base-a168l333-pooler.ap-southeast-1.aws.neon.tech/zheng2025?sslmode=require"
+```
+
+## 设置 Better Auth 所需的数据库表
+```
+npx @better-auth/cli generate
+```
+
+```
+npx @better-auth/cli migrate
+```
+这会创建 4 张表：user, account, session, verification
+
+
 ### 运行后端
 ```bash
 cd backend
@@ -77,7 +98,29 @@ uv sync
 uv run uvicorn main:app --reload
 ```
 
+## 注册账号，访问 http://localhost:8080/sign-up
 
+## 登录账号，访问 http://localhost:8080/sign-in
+
+## 访问首页
+首页会发请求给 http://localhost:8080/backend   
+会自动带上 Cookie，
+
+`backend/main.py` 文件里：
+
+```python
+@app.get("/")
+async def read_cookies(request: Request):
+    cookies = request.cookies
+    session_token = cookies['better-auth.session_token']
+    token = session_token.split('.')[0]
+    signture = session_token.split('.')[1]
+    return {"token": token}
+```
+
+就拿到了 token，如有需要可以用 `backend/verify_session_token.py` 进行验证。
+
+用这个 token 去数据库表 `session` 里查询即可。   
 
 ## 备注
 Python 生态做 Authentication 没有好的选择，   
