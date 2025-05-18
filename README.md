@@ -13,8 +13,8 @@ better-auth 没有提供对接其他语言的官方文档，这个方案是我�
 
 [参考](https://github.com/better-auth/better-auth/issues/2685)
 
-## 如何运行
-整体结构：本地用 nginx 做转发。  
+## 运行前的准备
+我们在本地开发环境用 nginx 做转发（假设环境是 macOS）    
 
 查看 nginx 配置文件路径：
 ```
@@ -70,30 +70,33 @@ pnpm install
 pnpm run dev
 ```
 
-### 配置 PostgreSQL 数据库
+### 创建一个新的空的 PostgreSQL 数据库
 ```
 cp .env.example .env
 ```
 
 `frontend/.env` 文件设置 `CONNECTION_STRING`
+例子：用 neon.tech 的 PostgreSQL 数据库
 ```
 CONNECTION_STRING="postgresql://neondb_owner:npg_QnvkFf2iPeN0@ep-curly-base-a168l333-pooler.ap-southeast-1.aws.neon.tech/zheng2025?sslmode=require"
 ```
-如果连接本地 PostgreSQL 数据库，先创建好数据库
+
+例子：连接本地 PostgreSQL 数据库，先创建好数据库
 ```
 createdb demo_better_auth_fastapi
 ```
-然后用
+
+然后
 ```
-CONNECTION_STRING="postgresql://postgres:password@localhost:5432/demo_better_auth_fastapi
+CONNECTION_STRING="postgresql://postgres:password@localhost:5432/demo_better_auth_fastapi"
 ```
 
-
-## 设置 Better Auth 所需的数据库表
+## 创建 Better Auth 所需的数据库表
 ```
 npx @better-auth/cli migrate
 ```
-这会创建 4 张表：user, account, session, verification
+会创建 4 张表：user, account, session, verification
+参考 `frontend/better-auth_migrations/`   
 
 
 ### 运行后端
@@ -113,23 +116,11 @@ uv run uvicorn main:app --reload
 
 ## 访问首页
 首页会发请求给 http://localhost:8080/backend   
-会自动带上 Cookie，
-
-`backend/main.py` 文件里：
-
-```python
-@app.get("/")
-async def read_cookies(request: Request):
-    cookies = request.cookies
-    session_token = cookies['better-auth.session_token']
-    token = session_token.split('.')[0]
-    signture = session_token.split('.')[1]
-    return {"token": token}
-```
-
-就拿到了 token，如有需要可以用 `backend/verify_session_token.py` 进行验证。
-
-用这个 token 去数据库表 `session` 里查询即可。   
+会自动带上 Cookie，请阅读 `backend/main.py` 的代码
+拿到 `better-auth.session_token` 之后，   
+有两种选择：
+1. 直接 `split(".")[0]` 拿去查询匹配数据库表 `session` 的 `token` 字段
+2. 验证一下签名，用 `backend/verify_session_token.py` 验证后，如果 valid（有效） 再去查询 数据库表 `session` 的 `token` 字段
 
 ## 备注
 Python 生态做 Authentication 没有好的选择，   
