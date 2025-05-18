@@ -18,10 +18,10 @@ export default async function Home() {
   const user = session.user
   console.log('user 是', user);
 
-  // 发请求给后端（注意这里是从 Next.js Server Component 发出请求，所以不带 Cookie）
+  // 发请求给后端（注意这里是 Next.js Server Component 发出请求，所以不带 Cookie，我们带一个 token）
   fetch('http://localhost:8080/backend', {
     headers: {
-      'Authorization': `Bearer ${session.session.token}`, // not standard JWT, just session token
+      'Authorization': `Bearer ${session.session.token}`,
       'Content-Type': 'application/json'
     }
   }).then(response => {

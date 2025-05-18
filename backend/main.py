@@ -36,7 +36,6 @@ async def root(request: Request, db: Session = Depends(get_session)):
             return {"error": "无效的登录凭证"}
         token_to_query_db = token
     elif auth_header: # 如果 Authorization header 存在，使用它
-        # TODO: 这里本应该是 JWT，但是前端传的是 session_token，先这样凑合用。
         token_to_query_db = auth_header.split(" ")[1]
 
     # 查询数据库表 `session` 的 token 字段
