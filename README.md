@@ -1,15 +1,16 @@
-## 演示：使用 `Better Auth`（Next.js） + FastAPI
-关键点：演示在 FastAPI 中获得 better auth 用户身份。  
+## 演示：使用 [better-auth](https://www.better-auth.com/) + FastAPI
+better-auth 是实现账号系统（用户注册登录）很好的工具，   
 
-## 为什么要用 FastAPI？明明 Next.js 可以做全栈（用 ORM 操作数据库）
-因为需要 AI 功能，AI 大多基于 Python 生态圈，很多库是 Python 库。   
+## 需求背景（为什么要做这件事）   
+我需要在一个 Next.js + FastAPI 项目里实现账号系统，    
+Next.js 主要做前端，FastAPI 是调用 AI 模型等，作为 API。   
+Python 和 FastAPI 都没有什么好的 Authentication 方案，[`FastAPI Users`](https://github.com/fastapi-users/fastapi-users) 我研究了一下觉得写起来很恶心。  
+better-auth 是一个很好的方案，我试用完觉得比较满意。我希望整合到我的项目里。   
 
-所以选用 Next.js 主要作为前端，发 HTTP 请求调用 Python FastAPI 后端。     
-
-## 这个仓库对你的价值
+## 本仓库对你有什么价值？
 `better-auth` 专注 Typescript 生态，短期内不会做对接其他语言。     
-通过这个示例，你就知道在 FastAPI 里如何获取用户身份    
-better-auth 没有提供对接其他语言的官方文档，这个方案是我自己摸索出来的  [参考资料](https://github.com/better-auth/better-auth/issues/2685)
+通过这个示例，你可以学会在 FastAPI 里如何获取 `better-auth` 的用户身份。       
+这个方案是我自己摸索出来的  [参考资料](https://github.com/better-auth/better-auth/issues/2685)
 
 ## 运行前的准备
 在本地开发环境用 nginx 做转发（以下命令假设操作系统是 macOS）    
