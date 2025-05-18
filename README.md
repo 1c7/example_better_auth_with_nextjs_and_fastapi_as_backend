@@ -156,3 +156,10 @@ FastAPI 里最好的选项是 `FastAPI Users`，但还是太难用了。
 1. `Next.js` 区分 Server Component 和 Client Component
 2. `Better-Auth` 也区分 server 和 client
 写代码时不要弄混了。     
+
+## 文件夹结构
+
+- `frontend/` 是 Next.js 项目
+- `backend/` 是 FastAPI 项目
+
+两个文件夹都是在新项目的基础上用尽可能少的代码演示功能，代码越少，干扰越少。   
