@@ -9,6 +9,11 @@ app = FastAPI(root_path='/backend')
 @app.get("/")
 async def read_cookies(request: Request):
     cookies = request.cookies
+    
+    # 检查是否存在session token
+    if 'better-auth.session_token' not in cookies:
+        return {"error": "未找到登录凭证，请先登录"}
+        
     session_token = cookies['better-auth.session_token']
     token = session_token.split('.')[0]
 
@@ -23,5 +28,7 @@ async def read_cookies(request: Request):
         print("Session token is valid.")
     else:
         print("Session token is invalid.")
+
+    # TODO: 获取用户信息，然后返回给前端
 
     return {"token": token}
