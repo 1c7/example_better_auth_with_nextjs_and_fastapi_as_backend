@@ -7,14 +7,12 @@
 所以选用 Next.js 主要作为前端，发 HTTP 请求调用 Python FastAPI 后端。     
 
 ## 这个仓库对你的价值
-`better-auth` 官方专注于 Typescript 生态，短期内不会做任何其他语言的对接。   
-我跑通了这个例子，你就知道如何在 FastAPI 里获取用户的身份（current user）  
-better-auth 没有提供对接其他语言的官方文档，这个方案是我自己摸索出来的。   
-
-[参考](https://github.com/better-auth/better-auth/issues/2685)
+`better-auth` 专注 Typescript 生态，短期内不会做对接其他语言。     
+通过这个示例，你就知道在 FastAPI 里如何获取用户身份    
+better-auth 没有提供对接其他语言的官方文档，这个方案是我自己摸索出来的  [参考资料](https://github.com/better-auth/better-auth/issues/2685)
 
 ## 运行前的准备
-我们在本地开发环境用 nginx 做转发（假设环境是 macOS）    
+在本地开发环境用 nginx 做转发（以下命令假设操作系统是 macOS）    
 
 查看 nginx 配置文件路径：
 ```
@@ -27,12 +25,12 @@ nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
 ```
 
-用 VSCode 编辑此文件
+编辑此文件
 ```
 code /opt/homebrew/etc/nginx/nginx.conf
 ```
 
-改成如下配置：  
+改成：  
 ```
 server {
     listen       8080;
@@ -47,9 +45,10 @@ server {
     }
 }
 ```
-入口是 8080，   
-`/` 地址指向了 Next.js 运行的 9000 端口   
-`/backend` 地址指向了 FastAPI 运行的 8000 端口   
+解释如下：  
+入口是 8080 端口，     
+`/` 指向 Next.js 运行的 9000 端口   
+`/backend` 指向 FastAPI 运行的 8000 端口   
 
 用以下命令，启用或者重启 nginx（使配置生效）
 ```
@@ -70,23 +69,24 @@ pnpm install
 pnpm run dev
 ```
 
-### 创建一个新的空的 PostgreSQL 数据库
+### 创建一个空的 PostgreSQL 数据库
+```
+createdb demo_better_auth_fastapi
+```
+
+设置环境变量，`frontend/.env` 文件内设置 `CONNECTION_STRING`
+
+先创建 .env 文件：  
 ```
 cp .env.example .env
 ```
 
-`frontend/.env` 文件设置 `CONNECTION_STRING`
 例子：用 neon.tech 的 PostgreSQL 数据库
 ```
 CONNECTION_STRING="postgresql://neondb_owner:npg_QnvkFf2iPeN0@ep-curly-base-a168l333-pooler.ap-southeast-1.aws.neon.tech/zheng2025?sslmode=require"
 ```
 
-例子：连接本地 PostgreSQL 数据库，先创建好数据库
-```
-createdb demo_better_auth_fastapi
-```
-
-然后
+例子：连接本地 PostgreSQL 数据库
 ```
 CONNECTION_STRING="postgresql://postgres:password@localhost:5432/demo_better_auth_fastapi"
 ```
@@ -115,17 +115,26 @@ uv run uvicorn main:app --reload
 ## 登录账号，访问 http://localhost:8080/sign-in
 
 ## 访问首页
-首页会发请求给 http://localhost:8080/backend   
-会自动带上 Cookie，请阅读 `backend/main.py` 的代码
-拿到 `better-auth.session_token` 之后，   
-有两种选择：
-1. 直接 `split(".")[0]` 拿去查询匹配数据库表 `session` 的 `token` 字段
-2. 验证一下签名，用 `backend/verify_session_token.py` 验证后，如果 valid（有效） 再去查询 数据库表 `session` 的 `token` 字段
+首页会发请求给 http://localhost:8080/backend     
 
-## 备注
-Python 生态做 Authentication 没有好的选择，   
-没有 Ruby on Rails 的 devise gem 或者类似 gem 那么易用。  
-因为我们选了 FastAPI，最好的选项是 `FastAPI Users`，但是依然太难用了。
+请阅读以下 2 个文件：  
+- `frontend/app/page.tsx`
+- `backend/main.py`
+
+## 概述 `frontend/app/page.tsx`
+因为这个页面是 Next.js Server Component，发请求是从服务器一侧发出，不是用户的浏览器，所以不带 Cookie，我们就直接带一个 `Authorization: Bearer [token]`   
+如果是 Next.js Client Component 就会默认携带 Cookie。  
+
+## 概述 `backend/main.py`
+从 Cookie 中获取 `better-auth.session_token`，   
+
+然后有两种选择：
+1. 直接使用 `split(".")[0]` 查询数据库表 `session` 的 `token` 字段
+2. 验证签名，用 `backend/verify_session_token.py` 验证后，如果 valid（有效） 再去查数据库表 `session` 的 `token` 字段
+
+## 备注：Python 生态做 Authentication 没有好的选择，   
+FastAPI 的生态里没有类似 Ruby on Rails 的 devise gem 那么好用。  
+FastAPI 里最好的选项是 `FastAPI Users`，但还是太难用了。  
 
 [Awesome Python 的 Authentication](https://github.com/vinta/awesome-python?tab=readme-ov-file#authentication) 都是一些简单的代码库，还是需要自己大量写代码。  
 
