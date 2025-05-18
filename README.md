@@ -27,13 +27,13 @@ nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
 ```
 
-编辑此文件
+用 VSCode 编辑此文件
 ```
 code /opt/homebrew/etc/nginx/nginx.conf
 ```
 
-关键点
-```json
+改成如下配置：  
+```
 server {
     listen       8080;
     server_name  localhost;
@@ -45,9 +45,13 @@ server {
     location /backend {
         proxy_pass http://localhost:8000; # 后端 FastAPI
     }
+}
 ```
+入口是 8080，   
+`/` 地址指向了 Next.js 运行的 9000 端口   
+`/backend` 地址指向了 FastAPI 运行的 8000 端口   
 
-让 nginx 启动或重启（使得配置生效）
+用以下命令，启用或者重启 nginx（使配置生效）
 ```
 - 启动：`brew services start nginx`
 - 停止：`brew services stop nginx`
@@ -71,16 +75,21 @@ pnpm run dev
 cp .env.example .env
 ```
 
-.env 文件设置 `CONNECTION_STRING`
+`frontend/.env` 文件设置 `CONNECTION_STRING`
 ```
 CONNECTION_STRING="postgresql://neondb_owner:npg_QnvkFf2iPeN0@ep-curly-base-a168l333-pooler.ap-southeast-1.aws.neon.tech/zheng2025?sslmode=require"
 ```
+如果连接本地 PostgreSQL 数据库，先创建好数据库
+```
+createdb demo_better_auth_fastapi
+```
+然后用
+```
+CONNECTION_STRING="postgresql://postgres:password@localhost:5432/demo_better_auth_fastapi
+```
+
 
 ## 设置 Better Auth 所需的数据库表
-```
-npx @better-auth/cli generate
-```
-
 ```
 npx @better-auth/cli migrate
 ```
