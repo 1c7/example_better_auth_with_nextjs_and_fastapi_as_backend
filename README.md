@@ -140,12 +140,12 @@ FastAPI 里最好的选项是 `FastAPI Users`，但还是太难用了。
 
 [Awesome Python 的 Authentication](https://github.com/vinta/awesome-python?tab=readme-ov-file#authentication) 都是一些简单的代码库，还是需要自己大量写代码。  
 
-## 结论：我希望用 better auth 作为 Authentication 方案
-1. [`better-auth`](https://github.com/better-auth/better-auth) 的 Github Star 有 13.5k
-2. 网上很多夸赞 better auth
+## 解释：为什么我想用 `better-auth` 作为 Authentication 方案
+2. 网上很多夸赞 better auth，[`better-auth`](https://github.com/better-auth/better-auth) 的 Github Star 有 13.5k
 3. better auth 是 YC 2025 春季被投企业（算是认可和背书）
 4. better auth 的文档清晰
 5. 我实际试用 better auth 觉得体验不错。   
+6. `FastAPI Users` 实在是太烂了，使用体验极差。   
 
 ## 参考资料
 1. [YC > Companies ›Better Auth](https://www.ycombinator.com/companies/better-auth)
@@ -156,12 +156,3 @@ FastAPI 里最好的选项是 `FastAPI Users`，但还是太难用了。
 1. `Next.js` 区分 Server Component 和 Client Component
 2. `Better-Auth` 也区分 server 和 client
 写代码时不要弄混了。     
-
-<!-- # Demo: use `better-auth`(Next.js) with FastAPI
-
-## Why Next.js + FastAPI? instead of just using Next.js alone
-a lot of AI lib are in Python ecosystem, I want to build a "AI Chatbot Web App",   
-so using Python would be a great idea.   
-
-## Value
- -->
