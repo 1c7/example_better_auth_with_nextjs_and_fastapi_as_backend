@@ -3,8 +3,8 @@ better-auth 是实现账号系统（用户注册登录）很好的工具，
 
 ## 需求背景（为什么要做这件事）   
 我需要在一个 Next.js + FastAPI 项目里实现账号系统，    
-Next.js 主要做前端，FastAPI 是调用 AI 模型等，作为 API。   
-Python 和 FastAPI 都没有什么好的 Authentication 方案，[`FastAPI Users`](https://github.com/fastapi-users/fastapi-users) 我研究了一下觉得写起来很恶心。  
+Next.js 做前端，FastAPI 作为前端的 API 负责调用 AI 模型等。   
+Python 和 FastAPI 都没有好的 Authentication 方案，[`FastAPI Users`](https://github.com/fastapi-users/fastapi-users) 我研究了一下觉得写起来很恶心。  
 better-auth 是一个很好的方案，我试用完觉得比较满意。我希望整合到我的项目里。   
 
 ## 本仓库对你有什么价值？
